@@ -1,0 +1,14 @@
+def savings_calc(income, expenses):
+    savings = income - expenses
+    return savings
+
+income = float(input("Monthly income: "))
+expense = float(input("Monthly expenses: "))
+
+savings = savings_calc (income, expense)
+
+if(savings>0.2*income):
+    print("You are saving enough")
+
+else:
+    print("You need to save more")

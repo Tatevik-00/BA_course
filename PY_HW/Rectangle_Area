@@ -1,0 +1,11 @@
+def rectangle_area_calc(length, width):
+    area = length*width
+    return area
+
+length = float(input("Rectangle Length: "))
+width = float(input("Rectangle Width: "))
+
+area = rectangle_area_calc(length, width)
+
+if(area<100):
+    print("The area is too small.")

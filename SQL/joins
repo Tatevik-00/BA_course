@@ -1,0 +1,79 @@
+use exploreplaces;
+
+SELECT full_name from users 
+where user_id IN (select user_id from reviews where rating = 5);
+
+select users.full_name, reviews.comment, reviews.rating
+from reviews
+join users
+ON users.user_id=reviews.user_id
+where reviews.rating = 5;
+
+select users.full_name, reviews.comment
+from reviews
+join users
+on users.user_id=reviews.user_id;
+
+select restaurants.name, cities.city_name, cuisine.cuisine_name
+from restaurants
+join cities
+on restaurants.city_id = cities.city_id
+join cuisine
+on restaurants.cuisine_id = cuisine.cuisine_id;
+
+-- Show the list of restaurants names that have received reviews, along with the comments, names of users who wrote those reviews and rating score.
+
+select restaurants.name, reviews.comment, users.full_name, reviews.rating
+from reviews
+join restaurants on restaurants.restaurant_id = reviews.restaurant_id
+join users on users.user_id = reviews.user_id;
+
+-- List hotels and restaurants located in the same city. Show hotel, restaurant names: also would be nice to return city name as well.
+
+select restaurants.name AS restaurnat_name, hotels.name AS hotel_name, cities.city_name
+from cities
+join restaurants on restaurants.city_id = cities.city_id
+join hotels on hotels.city_id = cities.city_id;
+
+-- Find users who reacted to reviews but haven’t written any reviews themselves-> use joins and where
+insert	into users
+values (14, "Mike Tyson", "mike@gmail.com", 69, "USA", "2025-10-25");
+
+insert into review_reactions
+values (14, 12, 14, "like");
+
+SELECT u.full_name
+FROM users u
+JOIN review_reactions rr ON u.user_id = rr.user_id
+left join reviews r on r.user_id= u.user_id
+where r.review_id is NULL;
+
+-- List names of users who left reviews for both resturants and hotels.
+
+select distinct users.full_name
+from users
+join reviews on users.user_id = reviews.user_id and hotel_id is not null;
+
+-- Find users who joined before a "Carlos Martinez" user. Return both user names and their join dates.
+
+select full_name, join_date
+from users
+where join_date < (select join_date from users where full_name = "Carlos Martinez");
+
+-- Find all restaurants serving “Armenian” cuisine in “Yerevan”. Return resturant names, cuisine and city name.
+
+select restaurants.name, cuisine.cuisine_name, cities.city_name
+from restaurants
+join cuisine on restaurants.cuisine_id = cuisine.cuisine_id
+join cities on cities.city_id = restaurants.city_id
+where cuisine_name = "Armenian" and city_name = "Yerevan";
+
+-- Create a single list showing both restaurants and hotels located in the same city. Return place_name, type, and city_name.
+
+select name as place_name, "restaurant" as type, city_name
+from restaurants
+join cities on cities.city_id = restaurants.city_id
+union ALL
+select name as place_name, "hotel" as type, city_name
+from hotels
+join cities on cities.city_id = hotels.city_id;
